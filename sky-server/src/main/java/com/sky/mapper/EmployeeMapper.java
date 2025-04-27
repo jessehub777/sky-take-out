@@ -30,6 +30,9 @@ public interface EmployeeMapper {
 
     /**
      * 分页查询
+     * 此处不使用注解方式，因为不方便（动态sql）动态标签
+     * 应该写到映射文件中，resources/mapper/EmployeeMapper.xml中
+     * 是否能扫描到xml？看resources/application.yml中mybatis.mapper-locations配置
      *
      * @param employeePageQueryDTO
      * @return
