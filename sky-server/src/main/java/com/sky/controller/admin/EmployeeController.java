@@ -25,12 +25,12 @@ import java.util.Map;
 @RequestMapping("/admin/employee")
 @Slf4j
 public class EmployeeController {
-
+    
     @Autowired
     private EmployeeService employeeService;
     @Autowired
     private JwtProperties jwtProperties;
-
+    
     /**
      * 登录
      *
@@ -39,10 +39,8 @@ public class EmployeeController {
      */
     @PostMapping("/login")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
-        log.info("员工登录：{}", employeeLoginDTO);
-
         Employee employee = employeeService.login(employeeLoginDTO);
-
+        
         //登录成功后，生成jwt令牌
         Map<String, Object> claims = new HashMap<>();
         claims.put(JwtClaimsConstant.EMP_ID, employee.getId());
@@ -50,17 +48,17 @@ public class EmployeeController {
                 jwtProperties.getAdminSecretKey(),
                 jwtProperties.getAdminTtl(),
                 claims);
-
+        
         EmployeeLoginVO employeeLoginVO = EmployeeLoginVO.builder()
                 .id(employee.getId())
                 .userName(employee.getUsername())
                 .name(employee.getName())
                 .token(token)
                 .build();
-
+        
         return Result.success(employeeLoginVO);
     }
-
+    
     /**
      * 退出
      *
@@ -70,8 +68,8 @@ public class EmployeeController {
     public Result<String> logout() {
         return Result.success();
     }
-
-
+    
+    
     /**
      * 新增员工
      *
@@ -80,11 +78,10 @@ public class EmployeeController {
      */
     @PostMapping()
     public Result<String> save(@RequestBody EmployeeDTO employeeDTO) {
-        log.info("新增员工 {}", employeeDTO);
         employeeService.save(employeeDTO);
         return Result.success();
     }
-
+    
     /**
      * 员工分页查询。   参数不是json格式，不需要加@RequestBody
      *
@@ -93,9 +90,8 @@ public class EmployeeController {
      */
     @GetMapping("/page")
     public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO) {
-        log.info("员工分页查询：{}", employeePageQueryDTO);
         PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
         return Result.success(pageResult);
     }
-
+    
 }

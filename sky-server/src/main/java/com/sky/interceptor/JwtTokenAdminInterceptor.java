@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,10 +20,10 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 @Slf4j
 public class JwtTokenAdminInterceptor implements HandlerInterceptor {
-
+    
     @Autowired
     private JwtProperties jwtProperties;
-
+    
     /**
      * 校验jwt
      *
@@ -38,19 +39,19 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             //当前拦截到的不是动态方法，直接放行
             return true;
         }
-
+        
         //1、从请求头中获取令牌
         String token = request.getHeader(jwtProperties.getAdminTokenName());
-
+        
         //2、校验令牌
         try {
             log.info("jwt校验:{}", token);
             Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
             Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
-
+            
             // 通过JWT中的Token反向解析获取 然后存储到threadLocal.set(id)中
             BaseContext.setCurrentId(empId);
-
+            
             log.info("当前员工id：{}", empId);
             //3、通过，放行
             return true;

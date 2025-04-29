@@ -15,7 +15,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-
+    
     /**
      * 捕获业务异常
      *
@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
         log.error("异常信息：{}", ex.getMessage());
         return Result.error(ex.getMessage());
     }
-
+    
     /**
      * 处理SQL异常 当有重复的用户id，直接捕获SQL异常，处理后返回给前端
      *
@@ -45,6 +45,6 @@ public class GlobalExceptionHandler {
         } else {
             return Result.error(MessageConstant.UNKNOWN_ERROR);
         }
-
+        
     }
 }
