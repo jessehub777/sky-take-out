@@ -86,7 +86,6 @@ public class EmployeeController {
      * 员工分页查询。   参数不是json格式，不需要加@RequestBody
      *
      * @param employeePageQueryDTO
-     * @return
      */
     @GetMapping("/page")
     public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO) {
@@ -94,4 +93,14 @@ public class EmployeeController {
         return Result.success(pageResult);
     }
     
+    /**
+     * 员工分页查询。   参数不是json格式，不需要加@RequestBody
+     * 使用@PathVariable来接收     * 通过路径参数来接收
+     * Query方式是默认的请求方式,所以什么也不加
+     */
+    @PostMapping("/status/{status}")
+    public Result startOrStop(@PathVariable Integer status, long id) {
+        employeeService.startOrStop(status, id);
+        return Result.success();
+    }
 }
