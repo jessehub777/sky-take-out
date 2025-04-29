@@ -94,8 +94,9 @@ public class EmployeeController {
     }
     
     /**
-     * 员工分页查询。   参数不是json格式，不需要加@RequestBody
-     * 使用@PathVariable来接收     * 通过路径参数来接收
+     * 员工状态更新-启用禁用
+     * 1.使用@PathVariable来接收status
+     * 2.通过路径参数来接收id
      * Query方式是默认的请求方式,所以什么也不加
      */
     @PostMapping("/status/{status}")
