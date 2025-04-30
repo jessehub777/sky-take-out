@@ -104,4 +104,24 @@ public class EmployeeController {
         employeeService.startOrStop(status, id);
         return Result.success();
     }
+    
+    /**
+     * 根据ID查询对应员工信息
+     * 1.使用@PathVariable来接收 id
+     */
+    @GetMapping("/{id}")
+    public Result getUserById(@PathVariable long id) {
+        EmployeeDTO employee = employeeService.getUserById(id);
+        return Result.success(employee);
+    }
+    
+    /**
+     * 根据ID更新对应员工信息
+     * 1.使用@PathVariable来接收 id
+     */
+    @PutMapping("")
+    public Result update(@RequestBody EmployeeDTO employeeDTO) {
+        employeeService.update(employeeDTO);
+        return Result.success();
+    }
 }

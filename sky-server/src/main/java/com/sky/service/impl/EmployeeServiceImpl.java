@@ -115,11 +115,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         
         long total = page.getTotal();  // 通过page.getTotal()获取总记录数
         List<Employee> records = page.getResult(); // 通过page.getResult()获取当前页的记录
-        
+        records.forEach(record -> {
+            record.setPassword("");
+        });
         return new PageResult(total, records);
     }
     
-    @Override
     public void startOrStop(Integer status, long id) {
         // update employee set status = #{status} where id = #{id}
         Employee employee = new Employee();
@@ -129,5 +130,20 @@ public class EmployeeServiceImpl implements EmployeeService {
         // 这里传输实体类
         employeeMapper.update(employee);
     }
+    
+    public EmployeeDTO getUserById(long id) {
+        // select * from employee where id = #{id}
+        // 如果是用实体类的话,需要employee.setPassword(“***”)
+        return employeeMapper.getUserById(id);
+    }
+    
+    public void update(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        employeeMapper.update(employee);
+    }
+    
     
 }
