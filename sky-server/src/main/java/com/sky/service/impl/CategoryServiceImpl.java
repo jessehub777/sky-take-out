@@ -26,9 +26,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     
-    private CategoryMapper categoryMapper;
-    private DishMapper dishMapper;
-    private SetmealMapper setmealMapper;
+    private final CategoryMapper categoryMapper;
+    private final DishMapper dishMapper;
+    private final SetmealMapper setmealMapper;
     
     /**
      * 新增分类
