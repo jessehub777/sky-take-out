@@ -8,6 +8,6 @@ sky:
     password: root
 minio:
   endpoint: http://127.0.0.1:9000
-  access-key: J6ZPdnXsnDZVTCZbbXdO
-  secret-key: cCS84zuW0ETy6UmaQdakHDmgKlH7ON1nMwvHVTW1
+  access-key: qYkUmcvhl64D1r5iVp6X
+  secret-key: 85PtgFJ9LpCKXp47z74KI0L340VZecnRAoWndNx7
   bucket: sky-local-oss
