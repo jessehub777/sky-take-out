@@ -10,4 +10,20 @@
             (#{item.dishId}, #{item.name}, #{item.value})
         </foreach>
     </insert>
+
+    <update id="updateByDishId">
+        update dish_flavor
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="value != null">value = #{value},</if>
+        </set>
+        where dish_id = #{dishId}
+    </update>
+
+    <delete id="deleteByDishIds">
+        delete from dish_flavor where dish_id in
+        <foreach collection="dishIds" item="dishId" separator=",">
+            #{dishId}
+        </foreach>
+    </delete>
 </mapper>
