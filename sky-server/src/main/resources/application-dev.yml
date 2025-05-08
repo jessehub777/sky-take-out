@@ -11,3 +11,9 @@ minio:
   access-key: qYkUmcvhl64D1r5iVp6X
   secret-key: 85PtgFJ9LpCKXp47z74KI0L340VZecnRAoWndNx7
   bucket: sky-local-oss
+
+redis:
+  host: localhost
+  port: 6379
+  password: 123456
+  database: 0
