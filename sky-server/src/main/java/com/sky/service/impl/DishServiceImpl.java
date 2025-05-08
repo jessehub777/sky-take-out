@@ -152,4 +152,28 @@ public class DishServiceImpl implements DishService {
             dishFlavorMapper.insertBatch(dishFlavors);
         }
     }
+    
+    /**
+     * 根据分类id查询菜品列表--菜品必须是启售状态
+     *
+     * @param categoryId
+     * @return
+     */
+    public List<Dish> getListByCategoryId(Long categoryId) {
+        Dish dish = Dish.builder()
+                .categoryId(categoryId)
+                .status(StatusConstant.ENABLE)
+                .build();
+        return dishMapper.list(dish);
+    }
+    
+    /**
+     * 启售和停售菜品
+     *
+     * @param status
+     * @param id
+     */
+    public void status(Integer status, Integer id) {
+        dishMapper.setStatus(status, id);
+    }
 }
