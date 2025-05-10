@@ -3,6 +3,7 @@ package com.sky.test;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.core.*;
 
 import java.util.List;
@@ -186,8 +187,17 @@ public class SpringDataRedisTest {
         // 也可以使用redisTemplate.execute方法执行原生的redis命令
         // redisTemplate.execute();
         
-        redisTemplate.delete("keyName");
-        redisTemplate.hasKey("keyName");
+        Set<String> keys = redisTemplate.keys("*");
+        System.out.println("所有的key：" + keys);
+        
+        DataType set2 = redisTemplate.type("set1");
+        System.out.println("set2的类型：" + set2.name());
+        
+        redisTemplate.delete("set1");
+        
+        Boolean keyName = redisTemplate.hasKey("keyName");
+        Boolean set1 = redisTemplate.hasKey("set1");
+        
         redisTemplate.expire("keyName", 10, TimeUnit.SECONDS);
         redisTemplate.getExpire("keyName", TimeUnit.SECONDS);
         
