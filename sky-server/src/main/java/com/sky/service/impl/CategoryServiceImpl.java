@@ -112,7 +112,7 @@ public class CategoryServiceImpl implements CategoryService {
     /**
      * 根据类型查询分类
      */
-    public List<Category> list(Integer type) {
+    public List<CategoryDTO> list(Integer type) {
         return categoryMapper.list(type);
     }
 }

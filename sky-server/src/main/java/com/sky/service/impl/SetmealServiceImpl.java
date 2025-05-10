@@ -141,4 +141,14 @@ public class SetmealServiceImpl implements SetmealService {
         setmealMapper.update(setmeal);
         
     }
+    
+    /**
+     * 查询套餐列表
+     *
+     * @param setmeal
+     * @return
+     */
+    public List<Setmeal> list(Setmeal setmeal) {
+        return setmealMapper.list(setmeal);
+    }
 }

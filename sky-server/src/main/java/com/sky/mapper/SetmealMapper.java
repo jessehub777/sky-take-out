@@ -55,6 +55,13 @@ public interface SetmealMapper {
     Setmeal getById(Long id);
     
     /**
+     * 查询套餐列表
+     *
+     * @return
+     */
+    List<Setmeal> list(Setmeal setmeal);
+    
+    /**
      * 根据id修改套餐状态
      *
      * @param setmeal

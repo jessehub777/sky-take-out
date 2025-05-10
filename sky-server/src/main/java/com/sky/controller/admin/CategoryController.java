@@ -2,7 +2,6 @@ package com.sky.controller.admin;
 
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
-import com.sky.entity.Category;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.CategoryService;
@@ -14,7 +13,7 @@ import java.util.List;
 /**
  * 分类管理
  */
-@RestController
+@RestController("adminCategoryController")
 @RequestMapping("/admin/category")
 @RequiredArgsConstructor
 public class CategoryController {
@@ -89,8 +88,8 @@ public class CategoryController {
      * @return
      */
     @GetMapping("/list")
-    public Result<List<Category>> list(Integer type) {
-        List<Category> list = categoryService.list(type);
+    public Result<List<CategoryDTO>> list(Integer type) {
+        List<CategoryDTO> list = categoryService.list(type);
         return Result.success(list);
     }
 }

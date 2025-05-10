@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * 菜品管理
  */
-@RestController
+@RestController("adminDishController")
 @RequiredArgsConstructor
 @RequestMapping("/admin/dish")
 public class DishController {

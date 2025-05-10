@@ -1,6 +1,7 @@
 package com.sky.controller.user;
 
 import com.sky.result.Result;
+import com.sky.service.DishService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -20,15 +21,18 @@ public class ShopController {
     private final RedisTemplate<String, String> redisTemplate;
     
     public static String KEY = "SHOP_STATUS";
+    private final DishService dishService;
     
     /**
      * 获取店铺营业状态
      *
      * @return Result<String>
      */
-    @GetMapping("status")
+    @GetMapping("/status")
     public Result<Integer> getStatus() {
         Integer shopStatus = Integer.valueOf(Objects.requireNonNull(redisTemplate.opsForValue().get(KEY)));
         return Result.success(shopStatus);
     }
+    
+
 }
