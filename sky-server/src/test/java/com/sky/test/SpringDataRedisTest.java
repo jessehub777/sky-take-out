@@ -143,4 +143,53 @@ public class SpringDataRedisTest {
         System.out.println("删除 1 后的 set1：" + setAfterRemove);
         
     }
+    
+    /**
+     * 操作ZSet类型的数据
+     */
+    @Test
+    public void testZSet() {
+        // zadd zrange zincrby zrem
+        ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+        
+        // zadd
+        zSetOperations.add("zset1", "a", 1);
+        zSetOperations.add("zset1", "b", 2);
+        zSetOperations.add("zset1", "c", 3);
+        zSetOperations.add("zset1", "d", 4);
+        zSetOperations.add("zset1", "a", 5); // 如果元素已经存在，则更新分数
+        
+        // zrange
+        Set<String> range = zSetOperations.range("zset1", 0, -1);
+        System.out.println("range=> " + range);
+        
+        // zincrby
+        Double increment = zSetOperations.incrementScore("zset1", "a", 2);
+        System.out.println("a的分数增加2后：" + increment);
+        Set<String> rangeAfterIncrement = zSetOperations.range("zset1", 0, -1);
+        System.out.println(rangeAfterIncrement);
+        
+        // zrem
+        Long remove = zSetOperations.remove("zset1", "a");
+        System.out.println("删除的元素个数：" + remove);
+        Set<String> rangeAfterRemove = zSetOperations.range("zset1", 0, -1);
+        System.out.println("range=> " + rangeAfterRemove);
+    }
+    
+    /**
+     * Redis通用操作 不区分数据类型
+     */
+    @Test
+    public void testCommon() {
+        // opsForValue opsForHash opsForList opsForSet opsForZSet
+        // 直接使用redisTemplate的opsForXxx方法获取对应的操作对象
+        // 也可以使用redisTemplate.execute方法执行原生的redis命令
+        // redisTemplate.execute();
+        
+        redisTemplate.delete("keyName");
+        redisTemplate.hasKey("keyName");
+        redisTemplate.expire("keyName", 10, TimeUnit.SECONDS);
+        redisTemplate.getExpire("keyName", TimeUnit.SECONDS);
+        
+    }
 }
