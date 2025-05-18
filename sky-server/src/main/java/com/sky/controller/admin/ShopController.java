@@ -1,7 +1,6 @@
 package com.sky.controller.admin;
 
 import com.sky.result.Result;
-import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +9,6 @@ import java.util.Objects;
 
 @RestController("adminShopController")
 @RequestMapping("/admin/shop")
-@Api(tags = "店铺管理")
 @RequiredArgsConstructor
 public class ShopController {
     
