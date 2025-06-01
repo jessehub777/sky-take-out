@@ -18,7 +18,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
  */
 @Component
 @Slf4j
-public class JwtTokenAdminInterceptor implements HandlerInterceptor {
+public class JwtTokenUserInterceptor implements HandlerInterceptor {
     
     @Autowired
     private JwtProperties jwtProperties;
@@ -40,27 +40,26 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
         }
         
         //1、从请求头中获取令牌
-        String token = request.getHeader(jwtProperties.getAdminTokenName());
+        String token = request.getHeader(jwtProperties.getUserTokenName());
         
         //2、校验令牌
         try {
-            log.info("Admin-JWT校验:{}", token);
-            Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
-            Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
+            log.info("User-JWT校验:{}", token);
+            Claims claims = JwtUtil.parseJWT(jwtProperties.getUserSecretKey(), token);
+            Long userId = Long.valueOf(claims.get(JwtClaimsConstant.USER_ID).toString());
             
             // 通过JWT中的Token反向解析获取 然后存储到threadLocal.set(id)中
-            BaseContext.setCurrentId(empId);
+            BaseContext.setCurrentId(userId);
             
-            log.info("当前员工id：{}", empId);
+            log.info("当前用户id：{}", userId);
             //3、通过，放行
             return true;
         } catch (Exception ex) {
             //4、不通过，响应401状态码
-            log.error("Admin-JWT校验失败: {}", ex.getMessage());
+            log.error("User-JWT校验失败: {}", ex.getMessage());
             response.setStatus(401);
             return false;
         }
-        
     }
     
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {

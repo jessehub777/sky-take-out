@@ -10,6 +10,8 @@ import java.io.Serializable;
 @Data
 public class UserLoginDTO implements Serializable {
     
-    private String code;
+    private String mail; // 邮箱
+    
+    private String passwd; // 密码
     
 }
