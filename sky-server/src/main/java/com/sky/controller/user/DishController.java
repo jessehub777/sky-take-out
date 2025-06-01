@@ -7,9 +7,11 @@ import com.sky.result.Result;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 菜品管理
@@ -20,6 +22,8 @@ import java.util.List;
 public class DishController {
     
     private final DishService dishService;
+    
+    private final RedisTemplate redisTemplate;
     
     
     /**
@@ -38,12 +42,27 @@ public class DishController {
      */
     @GetMapping("/list")
     public Result<List<DishVO>> getDishListByCategoryId(@RequestParam Long categoryId) {
+        
+        // 构造Redis当中的key 规则 dish_categoryId
+        String key = "dish_" + categoryId;
+        
+        // 先判断缓存中是否有数据
+        List<DishVO> dishList = (List<DishVO>) redisTemplate.opsForValue().get(key);
+        if (dishList != null && !dishList.isEmpty()) {
+            // 如果有，则直接返回,无需查询数据库
+            return Result.success(dishList);
+        }
+        
+        
+        // 如果没有，则从数据库查询,1然后存入缓存
         Dish dish = new Dish();
         dish.setCategoryId(categoryId);
         dish.setStatus(StatusConstant.ENABLE);
         
-        List<DishVO> list = dishService.listWidthFlavor(dish);
-        return Result.success(list);
+        dishList = dishService.listWidthFlavor(dish);
+        // 2将查询到的菜品列表存入缓存
+        redisTemplate.opsForValue().set(key, dishList, 120, TimeUnit.MINUTES);
+        return Result.success(dishList);
     }
     
 }
