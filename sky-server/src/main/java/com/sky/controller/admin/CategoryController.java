@@ -6,6 +6,7 @@ import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 public class CategoryController {
     
     private final CategoryService categoryService;
+    private final RedisTemplate redisTemplate;
     
     /**
      * 新增分类
@@ -29,6 +31,8 @@ public class CategoryController {
     @PostMapping
     public Result<String> save(@RequestBody CategoryDTO categoryDTO) {
         categoryService.save(categoryDTO);
+        // 清除所有缓存
+        deleteCache();
         return Result.success();
     }
     
@@ -53,6 +57,8 @@ public class CategoryController {
     @DeleteMapping
     public Result<String> deleteById(Long id) {
         categoryService.deleteById(id);
+        // 清除所有缓存
+        deleteCache();
         return Result.success();
     }
     
@@ -65,6 +71,8 @@ public class CategoryController {
     @PutMapping
     public Result<String> update(@RequestBody CategoryDTO categoryDTO) {
         categoryService.update(categoryDTO);
+        // 清除所有缓存
+        deleteCache();
         return Result.success();
     }
     
@@ -78,6 +86,8 @@ public class CategoryController {
     @PostMapping("/status/{status}")
     public Result<String> startOrStop(@PathVariable("status") Integer status, Long id) {
         categoryService.startOrStop(status, id);
+        // 清除所有缓存
+        deleteCache();
         return Result.success();
     }
     
@@ -91,5 +101,13 @@ public class CategoryController {
     public Result<List<CategoryDTO>> list(Integer type) {
         List<CategoryDTO> list = categoryService.list(type);
         return Result.success(list);
+    }
+    
+    /**
+     * 清除所有缓存
+     */
+    private void deleteCache() {
+        // 清除用户端分类缓存
+        redisTemplate.delete("category_list_for_user");
     }
 }

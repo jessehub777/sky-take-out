@@ -7,9 +7,11 @@ import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 菜品管理
@@ -20,6 +22,7 @@ import java.util.List;
 public class DishController {
     
     private final DishService dishService;
+    private final RedisTemplate redisTemplate;
     
     
     /**
@@ -28,6 +31,11 @@ public class DishController {
     @PostMapping()
     public Result save(@RequestBody DishDTO dishDTO) {
         dishService.saveWithFlavor(dishDTO);
+        
+        // 清除对应分类ID的缓存(单个)
+        String key = "dish_" + dishDTO.getCategoryId();
+        redisTemplate.delete(key);
+        
         return Result.success();
     }
     
@@ -49,6 +57,8 @@ public class DishController {
     @DeleteMapping()
     public Result delete(@RequestParam List<Long> ids) {
         dishService.deleteBatch(ids);
+        clearAllCache();
+        
         return Result.success();
     }
     
@@ -67,6 +77,8 @@ public class DishController {
     @PutMapping()
     public Result update(@RequestBody DishDTO dishDTO) {
         dishService.updateWithFlavor(dishDTO);
+        clearAllCache();
+        
         return Result.success();
     }
     
@@ -85,6 +97,19 @@ public class DishController {
     @PostMapping("/status/{status}")
     public Result status(@PathVariable Integer status, @RequestParam Integer id) {
         dishService.status(status, id);
+        clearAllCache();
+        
         return Result.success();
+    }
+    
+    /**
+     * 抽取一个公共方法用于清除缓存
+     */
+    private void clearAllCache() {
+        // 清除缓存--不一定对应哪个categoryId,所以直接删掉全部的就行了.
+        // 删除所有以 "dish_" 开头的缓存
+        Set keys = redisTemplate.keys("dish_*");
+        // delete方法可以接受一个Set集合,将所有匹配的key都删除
+        redisTemplate.delete(keys);
     }
 }
