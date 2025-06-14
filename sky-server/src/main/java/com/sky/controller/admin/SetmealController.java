@@ -8,6 +8,7 @@ import com.sky.result.Result;
 import com.sky.service.SetmealService;
 import com.sky.vo.SetmealVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class SetmealController {
      * @return
      */
     @PostMapping
+    @CacheEvict(cacheNames = "setmealCache", allEntries = true) // 清除所有缓存
     public Result save(@RequestBody SetmealDTO setmealDTO) {
         setmealService.saveWithDish(setmealDTO);
         return Result.success();
@@ -40,6 +42,7 @@ public class SetmealController {
      * 使用@RequestParam List<Long> ids     <=   1，2，3
      */
     @DeleteMapping
+    @CacheEvict(cacheNames = "setmealCache", allEntries = true) // 清除所有缓存
     public Result deleteBatch(@RequestParam List<Long> ids) {
         setmealService.deleteByIds(ids);
         return Result.success();
@@ -50,6 +53,7 @@ public class SetmealController {
      * DELETE请求 参数在URL中 不能使用@RequestBody
      */
     @PostMapping("/status/{status}")
+    @CacheEvict(cacheNames = "setmealCache", allEntries = true) // 清除所有缓存
     public Result setStatus(@PathVariable("status") Integer status, Long id) {
         Setmeal setmeal = Setmeal.builder()
                 .id(id)
